@@ -1,0 +1,30 @@
+{
+  "name": "textile-waste",
+  "version": "1.0.0",
+  "description": "TextileWaste E-commerce Platform",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm start",
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "clean": "rimraf node_modules frontend/node_modules backend/node_modules",
+    "clean-install": "npm run clean && npm run install-all",
+    "build": "cd frontend && npm run build",
+    "heroku-postbuild": "npm run install-all && npm run build",
+    "start:prod": "cd backend && NODE_ENV=production npm start",
+    "prepare-vercel": "node scripts/prepare-vercel.js",
+    "deploy:vercel": "npm run prepare-vercel && cd frontend && vercel"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "rimraf": "^5.0.5"
+  },
+  "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/forms": "^0.5.10",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "react-hot-toast": "^2.5.2",
+    "tailwindcss": "^4.0.14"
+  }
+}
