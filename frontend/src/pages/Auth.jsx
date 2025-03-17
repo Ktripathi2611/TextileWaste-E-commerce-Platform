@@ -44,8 +44,8 @@ const Auth = () => {
     if (success) {
       // Set flag to show welcome banner
       localStorage.setItem('showWelcome', 'true');
-      // Always redirect to profile page after login
-      navigate('/profile', { replace: true });
+      // Redirect to the path the user came from, or to profile page
+      navigate(from, { replace: true });
       toast.success('Welcome back! You are now logged in.');
     }
   };

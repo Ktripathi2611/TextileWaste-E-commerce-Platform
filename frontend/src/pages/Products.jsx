@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { MagnifyingGlassIcon, AdjustmentsHorizontalIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useCartStore } from '../context/cartStore';
@@ -24,24 +24,20 @@ const Products = () => {
   });
   const { addItem } = useCartStore();
 
-  useEffect(() => {
-    fetchProducts();
-  }, [filters, pagination.currentPage]);
-
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
       const params = {
         page: pagination.currentPage,
         limit: 12
       };
-      
+
       // Add filters
       if (searchQuery) params.q = searchQuery;
       if (filters.category) params.category = filters.category;
       if (filters.minPrice) params.minPrice = filters.minPrice;
       if (filters.maxPrice) params.maxPrice = filters.maxPrice;
-      
+       
       // Add sorting
       params.sort = filters.sort;
       params.order = filters.order;
@@ -59,7 +55,11 @@ const Products = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters, pagination.currentPage, searchQuery]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const handleSearch = (e) => {
     e.preventDefault();

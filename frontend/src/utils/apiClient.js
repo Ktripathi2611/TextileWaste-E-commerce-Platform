@@ -1,10 +1,16 @@
 import axios from 'axios';
 
-// Determine if we're in production
-const isProduction = process.env.NODE_ENV === 'production';
+// Get the API URL from environment variables or use a dynamic default based on current origin
+const API_URL = process.env.REACT_APP_API_URL ||
+    (process.env.NODE_ENV === 'production'
+        ? `${window.location.origin}/api`
+        : 'http://localhost:5000/api');
 
-// Get the API URL from environment variables or use a default
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// Log environment info in development
+if (process.env.NODE_ENV === 'development') {
+    console.log('API URL:', API_URL);
+    console.log('Environment:', process.env.NODE_ENV);
+}
 
 // Create API client instance
 const apiClient = axios.create({

@@ -5,8 +5,7 @@ import {
   UserGroupIcon, 
   GlobeAltIcon, 
   ChartBarIcon,
-  ArrowPathIcon,
-  HeartIcon
+  ArrowPathIcon
 } from '@heroicons/react/24/outline';
 
 const About = () => {
