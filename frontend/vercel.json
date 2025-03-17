@@ -6,7 +6,8 @@
       "use": "@vercel/static-build",
       "config": {
         "distDir": "build",
-        "buildCommand": "npm install && npm run build"
+        "installCommand": "npm install --no-shrinkwrap --force",
+        "buildCommand": "npm run build"
       }
     }
   ],
