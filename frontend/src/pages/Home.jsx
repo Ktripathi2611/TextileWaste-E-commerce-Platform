@@ -1,25 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { productsApi } from '../utils/apiClient';
+import { useProducts } from '../hooks/useProducts';
 
 const Home = () => {
-  const [featuredProducts, setFeaturedProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchFeaturedProducts = async () => {
-      try {
-        const response = await productsApi.getFeatured();
-        setFeaturedProducts(response.data);
-      } catch (error) {
-        console.error('Error fetching featured products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFeaturedProducts();
-  }, []);
+  const { data: featuredProducts, loading } = useProducts({ featured: true });
 
   return (
     <div>
@@ -60,7 +44,7 @@ const Home = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredProducts.map((product) => (
+            {featuredProducts?.map((product) => (
               <Link
                 key={product._id}
                 to={`/products/${product._id}`}

@@ -68,6 +68,9 @@ export const productsApi = {
     getById: (id) => apiClient.get(`/products/${id}`),
     getFeatured: () => apiClient.get('/products/featured'),
     search: (query) => apiClient.get('/products/search', { params: { q: query } }),
+    create: (productData) => apiClient.post('/products', productData),
+    update: (id, productData) => apiClient.put(`/products/${id}`, productData),
+    delete: (id) => apiClient.delete(`/products/${id}`),
 };
 
 // Orders API
@@ -86,6 +89,18 @@ export const supportTicketsApi = {
     addReply: (id, reply) => apiClient.post(`/support/tickets/${id}/messages`, reply),
     closeTicket: (id) => apiClient.put(`/support/tickets/${id}/status`, { status: 'closed' }),
     reopenTicket: (id) => apiClient.put(`/support/tickets/${id}/status`, { status: 'open' }),
+};
+
+// Admin API
+export const adminApi = {
+    getDashboardStats: () => apiClient.get('/admin/dashboard'),
+    getUsers: () => apiClient.get('/admin/users'),
+    updateUser: (userId, userData) => apiClient.put(`/admin/users/${userId}`, userData),
+    deleteUser: (userId) => apiClient.delete(`/admin/users/${userId}`),
+    updateUserRole: (userId, role) => apiClient.put(`/admin/users/${userId}/role`, { role }),
+    getOrders: (params) => apiClient.get('/admin/orders', { params }),
+    updateOrderStatus: (orderId, status) => apiClient.put(`/admin/orders/${orderId}/status`, { status }),
+    updatePaymentStatus: (orderId, status) => apiClient.put(`/admin/orders/${orderId}/payment`, { status }),
 };
 
 export default apiClient; 

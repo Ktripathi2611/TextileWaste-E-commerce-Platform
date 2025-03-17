@@ -3,17 +3,74 @@ import { persist } from 'zustand/middleware';
 import { authApi } from '../utils/apiClient';
 import toast from 'react-hot-toast';
 
+// Create a mock user for development
+const mockUser = {
+    _id: 'user123',
+    firstName: 'Test',
+    lastName: 'User',
+    email: 'test@example.com',
+    role: 'admin',
+    addresses: [
+        {
+            street: '123 Main St',
+            city: 'New York',
+            state: 'NY',
+            zipCode: '10001',
+            country: 'USA',
+            isDefault: true
+        },
+        {
+            street: '456 Oak Ave',
+            city: 'San Francisco',
+            state: 'CA',
+            zipCode: '94103',
+            country: 'USA',
+            isDefault: false
+        }
+    ],
+    phoneNumber: '555-123-4567',
+    wishlist: [
+        {
+            _id: 'prod1',
+            name: 'Organic Cotton T-Shirt',
+            price: 39.99,
+            imageUrl: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            _id: 'prod2',
+            name: 'Recycled Denim Jeans',
+            price: 89.99,
+            imageUrl: 'https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+        }
+    ]
+};
+
+// Mock token
+const mockToken = 'mock-jwt-token';
+
 export const useAuthStore = create(
     persist(
         (set, get) => ({
-            user: null,
-            token: null,
+            // For development/testing, initialize with mockUser
+            user: process.env.NODE_ENV === 'development' ? mockUser : null,
+            token: process.env.NODE_ENV === 'development' ? mockToken : null,
             loading: false,
             error: null,
 
             login: async (email, password) => {
                 try {
                     set({ loading: true, error: null });
+
+                    // For development/testing, use mock data
+                    if (process.env.NODE_ENV === 'development' && email === 'admin@example.com') {
+                        setTimeout(() => {
+                            set({ user: mockUser, token: mockToken, loading: false });
+                            toast.success('Login successful');
+                        }, 800);
+                        return true;
+                    }
+
+                    // Real API call for production
                     const response = await authApi.login({ email, password });
                     const { token, user } = response.data;
 
@@ -81,6 +138,20 @@ export const useAuthStore = create(
             checkAuth: async () => {
                 try {
                     set({ loading: true });
+
+                    // For development/testing, use mock data
+                    if (process.env.NODE_ENV === 'development') {
+                        setTimeout(() => {
+                            set({
+                                user: mockUser,
+                                token: mockToken,
+                                loading: false
+                            });
+                        }, 300);
+                        return true;
+                    }
+
+                    // Real API call for production
                     const token = localStorage.getItem('token');
                     if (!token) {
                         set({ user: null, token: null, loading: false });
